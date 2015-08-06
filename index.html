@@ -12,18 +12,31 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
+	<script src="https://fb.me/react-with-addons-0.13.3.min.js"></script>
+	<script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
    	<script type="text/jsx">
    		
+   		var If = React.createClass({
+			render: function() {
+				if (this.props.test) {
+					return this.props.children;
+				}
+				else {
+					return false;
+				}
+			}
+		});
+
+		var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
    		var ProductBox = React.createClass({
    			getInitialState : function() {
 				return { data : [
 					{"_id":"55aa5c9811d4c6140c43c25c","type":"veggie","rate":"38","name":"Tomato","__v":0,"ticker":"0.25","photo":"tomato.png"},
-					{"_id":"55aa5c9811d4c6140c43c25c","type":"veggie","rate":"38","name":"Tomato","__v":0,"ticker":"0.25","photo":"potato.png"},
-					{"_id":"55aa5c9811d4c6140c43c25c","type":"veggie","rate":"38","name":"Tomato","__v":0,"ticker":"0.25","photo":"ladyfinger.png"},
-					{"_id":"55aa5c9811d4c6140c43c25c","type":"veggie","rate":"38","name":"Tomato","__v":0,"ticker":"0.25","photo":"onions.png"}] };
+					{"_id":"55aa5c9811d4c614043c25c","type":"veggie","rate":"38","name":"Tomato","__v":0,"ticker":"0.25","photo":"potato.png"},
+					{"_id":"55aa5c9811dc6140c43c25c","type":"veggie","rate":"38","name":"Tomato","__v":0,"ticker":"0.25","photo":"ladyfinger.png"},
+					{"_id":"55a5c9811d4c6140c43c25c","type":"veggie","rate":"38","name":"Tomato","__v":0,"ticker":"0.25","photo":"onions.png"}] };
 			},
 			loadCommentsFromServer : function() {
 				$.ajax({
@@ -39,8 +52,8 @@
 				});
 			},
 			componentDidMount : function() {
-				this.loadCommentsFromServer();
-				//setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+				//this.loadCommentsFromServer();
+				setInterval(this.loadCommentsFromServer, this.props.pollInterval);
 			},
    			render : function() {
    				return (
@@ -53,13 +66,13 @@
    			render : function() {
    				var productNodes = this.props.data.map(function(product) {
 	   				return (
-	   					<Product photo={product.photo} rate={product.rate} ticker={product.ticker} />
+	   					<Product key={product._id} photo={product.photo} rate={product.rate} ticker={product.ticker} name={product.name}/>
 					);
 	   			});
 	   			return (
-	   				<div>
+	   				<ReactCSSTransitionGroup transitionName="item">
 					{productNodes}
-					</div>
+					</ReactCSSTransitionGroup>
 	   			);
 	   		}
    		});
@@ -67,86 +80,89 @@
    		var Product = React.createClass({
 			getInitialState : function(){
 				return {
-					amt : 0
+					amt : 0,
+					inCart : false,
+					blur : 0
 				};
 			},
 			onUpClick : function(event){
 				this.setState({
-					amt : parseFloat(this.state.amt) + parseFloat(this.props.ticker)
+					amt : parseFloat(this.state.amt) + parseFloat(this.props.ticker),
 				});
 			},
 			onDownClick : function(event){
 				if(parseFloat(this.state.amt) - parseFloat(this.props.ticker) >= 0) {
 					this.setState({
-						amt : parseFloat(this.state.amt) - parseFloat(this.props.ticker)
+						amt : parseFloat(this.state.amt) - parseFloat(this.props.ticker),
 					});
 				}
+				if(parseFloat(this.state.amt) - parseFloat(this.props.ticker) <= 0) {
+					this.setState({
+						inCart : false,
+						blur : ''
+					})
+				}
+			},
+			toggleToCart : function() {
+				var blur = 'blur';
+				var amt = this.state.amt;
+				if(this.state.inCart) {
+					blur = '';
+				}
+				if(amt <= 0) {
+					amt += parseFloat(this.state.amt) + parseFloat(this.props.ticker);
+				}
+				this.setState({
+					inCart : !this.state.inCart,
+					blur : blur,
+					amt : amt
+				});
+			},
+			overlay : function() {
+				return (
+				   		<div className="overlay">
+				   			<div className="col-xs-3">
+				   				<span className="plus-minus" onClick={this.onDownClick}>-</span>
+				   			</div>
+				   			<div className="col-xs-6">			   							   			
+					   			<h3><strong>{this.state.amt}KG<br />{this.props.name}</strong></h3><br />
+								<a onClick={this.toggleToCart}>REMOVE</a>
+				   			</div>
+				   			<div className="col-xs-3">
+				   				<span className="plus-minus" onClick={this.onUpClick}>+</span>
+				   			</div>
+						</div>
+					)
 			},
    			render : function () {
    				return (
    					<div className="item col-md-4 col-sm-6 col-xs-12">
 						<div className="row">
-							<div className="showcase col-xs-7" onClick={this.onUpClick}>
-								<img src={"img/products/" + this.props.photo} className="img-responsive" />
-								<h4>Rs. {this.props.rate} / kg</h4>
+							<div className={this.state.blur}>
+								<div className="showcase col-xs-6" onClick={this.onUpClick}>
+									<img src={"img/products/" + this.props.photo} className="img-responsive" />
+									<h4>Rs. {this.props.rate} / kg</h4>
+								</div>
+								<div className="qty col-xs-4">
+									<i className="fa fa-chevron-up" onClick={this.onUpClick}></i>
+									<span className="number">{this.state.amt} kg</span>
+									<i className="fa fa-chevron-down" onClick={this.onDownClick}></i>
+								</div>
+								<div className="addcart col-xs-2">
+									<i className="fa fa-cart-plus" onClick={this.toggleToCart}></i>
+								</div>
 							</div>
-							<div className="qty col-xs-5">
-								<i className="fa fa-chevron-up" onClick={this.onUpClick}></i>
-								<span className="number">{this.state.amt} kg</span>
-								<i className="fa fa-chevron-down" onClick={this.onDownClick}></i>
-							</div>
+							<If test={this.state.inCart}>
+								{this.overlay()}
+							</If>
 						</div>
 					</div>
    				);
    			}
    		});
 
-		var BottomBar = React.createClass({
-			render : function() {
-				return (
-					<div class="container">
-						<div className="row">
-							<Cart />
-							<Checkout />
-							<Address />
-						</div>
-					</div>
-				)
-			}
-		});
-
-		var Cart = React.createClass({
-			render : function() {
-				return (
-					<div className="user-view col-md-3 col-sm-3 col-xs-2">
-						<span className="hidden-xs text">Profile</span><i className="fa fa-user"></i>
-					</div>
-				);
-			}
-		});
-
-		var Checkout = React.createClass({
-			render : function() {
-				return (
-					<div className="checkout col-md-6 col-sm-6 col-xs-8">
-						<i className="fa fa-money"></i> <span className="hidden-xs text">Checkout</span><span className="text">Rs. 122</span>
-					</div>
-				)
-			}
-		});
-
-		var Address = React.createClass({
-			render : function() {
-				return (
-					<div className="user-view col-md-3 col-sm-3 col-xs-2">
-						<i className="fa fa-shopping-cart"></i><span className="hidden-xs text">View Cart</span>
-					</div>
-				);
-			}
-		});
-
    		React.render(
-			<ProductBox url="http://192.168.4.232:5000/api/v1/products" pollInterval={2000} />,
+			<ProductBox url="http://192.168.0.102:5000/api/v1/products" pollInterval={2000} />,
 			document.getElementById('veggiepanel')
 		);
 		// React.render( <BottomBar />, document.getElementById('bottombar'));
@@ -157,7 +173,9 @@
 	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container">
 			<div id="header" class="row">
-				<div class="col-md-12"><img src="img/logo.png" class="img-responsive logo" /></div>
+				<div class="col-md-12">
+					<img src="img/logo.png" class="img-responsive logo" />
+				</div>
 			</div>
 			<div id="tabs" class="row">
 				<div class="tab selected col-xs-4">
@@ -176,8 +194,9 @@
 		<div id="veggiepanel" class="row"></div>
 	</div>
 	<nav id="bottombar" class="navbar navbar-default navbar-fixed-bottom">
-		<div class="container"></div>
+		<div class="container">
+			<span>Checkout - Rs. 122</span>
+		</div>
 	</div>
-	<script type="text/javascript" src="cordova.js"></script>
 </body>
 </html>

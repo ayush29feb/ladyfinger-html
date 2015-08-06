@@ -65,10 +65,89 @@ body {
 	display: block;
 }
 
+.item .addcart {
+	margin: 50px 0;
+	padding: 0 5px;
+}
+
+.item .addcart i {
+	cursor: pointer;
+	font-size: 30px;
+}
+
+.item-enter {
+  opacity: 0.01;
+}
+
+.item-enter.item-enter-active {
+  opacity: 1;
+  transition: opacity 1s ease-in;
+}
+
+.item-leave {
+	opacity: 1;
+}
+
+.item-leave.item-leave-active {
+  opacity: 0.01;
+  transition: opacity 1s ease-in;
+}
+
+.overlay {
+	background-color: green;
+	opacity: 0.7;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	color: white;
+	padding: 30px 0;
+}
+.overlay a {
+	color: white;
+	text-decoration: none;
+	cursor: pointer;
+}
+.overlay a:hover {
+	color: white;
+	text-decoration: none;
+	cursor: pointer;
+}
+.overlay span, h3 {
+	display: inline;
+}
+
+.overlay .plus-minus {
+	cursor: pointer;
+	font-size: 50px;
+	font-weight: 500;
+}
+
+.overlay a {
+	display: block;	
+}
+
+.blur {
+	-webkit-filter: blur(5px);
+	-moz-filter: blur(5px);
+	-o-filter: blur(5px);
+	-ms-filter: blur(5px);
+	filter: blur(5px);
+}
+
+.overlay-white {
+	background-color: white;
+	opacity: 0.7;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+}
 
 #bottombar {
 	background-color: #3BB60F;
 	color: white;
+	padding: 10px 0;
+	font-size: 20px;
+	text-align: center;
 }
 
 #bottombar i {

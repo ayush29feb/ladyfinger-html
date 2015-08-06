@@ -1,12 +1,183 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Ladyfinger</title>
-	<link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.indigo-pink.min.css">
-	<script src="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.min.js"></script>
-	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    <title>Ladyfinger</title>
+
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+   	<script type="text/jsx">
+   		
+   		var ProductBox = React.createClass({
+   			getInitialState : function() {
+				return { data : [
+					{"_id":"55aa5c9811d4c6140c43c25c","type":"veggie","rate":"38","name":"Tomato","__v":0,"ticker":"0.25","photo":"tomato.png"},
+					{"_id":"55aa5c9811d4c6140c43c25c","type":"veggie","rate":"38","name":"Tomato","__v":0,"ticker":"0.25","photo":"potato.png"},
+					{"_id":"55aa5c9811d4c6140c43c25c","type":"veggie","rate":"38","name":"Tomato","__v":0,"ticker":"0.25","photo":"ladyfinger.png"},
+					{"_id":"55aa5c9811d4c6140c43c25c","type":"veggie","rate":"38","name":"Tomato","__v":0,"ticker":"0.25","photo":"onions.png"}] };
+			},
+			loadCommentsFromServer : function() {
+				$.ajax({
+					url : this.props.url,
+					dataType : 'json',
+					cache : false,
+					success: function(data) {
+						this.setState({data : data.products});
+					}.bind(this),
+					error: function(xhr, status, err) {
+						console.error(this.props.url, status, err.toString());
+					}.bind(this)
+				});
+			},
+			componentDidMount : function() {
+				this.loadCommentsFromServer();
+				//setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+			},
+   			render : function() {
+   				return (
+   					<ProductList data={this.state.data} />
+   				);
+   			}
+   		});
+
+   		var ProductList = React.createClass({
+   			render : function() {
+   				var productNodes = this.props.data.map(function(product) {
+	   				return (
+	   					<Product photo={product.photo} rate={product.rate} ticker={product.ticker} />
+					);
+	   			});
+	   			return (
+	   				<div>
+					{productNodes}
+					</div>
+	   			);
+	   		}
+   		});
+
+   		var Product = React.createClass({
+			getInitialState : function(){
+				return {
+					amt : 0
+				};
+			},
+			onUpClick : function(event){
+				this.setState({
+					amt : parseFloat(this.state.amt) + parseFloat(this.props.ticker)
+				});
+			},
+			onDownClick : function(event){
+				if(parseFloat(this.state.amt) - parseFloat(this.props.ticker) >= 0) {
+					this.setState({
+						amt : parseFloat(this.state.amt) - parseFloat(this.props.ticker)
+					});
+				}
+			},
+   			render : function () {
+   				return (
+   					<div className="item col-md-4 col-sm-6 col-xs-12">
+						<div className="row">
+							<div className="showcase col-xs-7" onClick={this.onUpClick}>
+								<img src={"img/products/" + this.props.photo} className="img-responsive" />
+								<h4>Rs. {this.props.rate} / kg</h4>
+							</div>
+							<div className="qty col-xs-5">
+								<i className="fa fa-chevron-up" onClick={this.onUpClick}></i>
+								<span className="number">{this.state.amt} kg</span>
+								<i className="fa fa-chevron-down" onClick={this.onDownClick}></i>
+							</div>
+						</div>
+					</div>
+   				);
+   			}
+   		});
+
+		var BottomBar = React.createClass({
+			render : function() {
+				return (
+					<div class="container">
+						<div className="row">
+							<Cart />
+							<Checkout />
+							<Address />
+						</div>
+					</div>
+				)
+			}
+		});
+
+		var Cart = React.createClass({
+			render : function() {
+				return (
+					<div className="user-view col-md-3 col-sm-3 col-xs-2">
+						<span className="hidden-xs text">Profile</span><i className="fa fa-user"></i>
+					</div>
+				);
+			}
+		});
+
+		var Checkout = React.createClass({
+			render : function() {
+				return (
+					<div className="checkout col-md-6 col-sm-6 col-xs-8">
+						<i className="fa fa-money"></i> <span className="hidden-xs text">Checkout</span><span className="text">Rs. 122</span>
+					</div>
+				)
+			}
+		});
+
+		var Address = React.createClass({
+			render : function() {
+				return (
+					<div className="user-view col-md-3 col-sm-3 col-xs-2">
+						<i className="fa fa-shopping-cart"></i><span className="hidden-xs text">View Cart</span>
+					</div>
+				);
+			}
+		});
+
+   		React.render(
+			<ProductBox url="http://192.168.4.232:5000/api/v1/products" pollInterval={2000} />,
+			document.getElementById('veggiepanel')
+		);
+		// React.render( <BottomBar />, document.getElementById('bottombar'));
+   	</script>
+	
 </head>
 <body>
-	
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div id="header" class="row">
+				<div class="col-md-12"><img src="img/logo.png" class="img-responsive logo" /></div>
+			</div>
+			<div id="tabs" class="row">
+				<div class="tab selected col-xs-4">
+					<h4>Vegetables</h4>
+				</div>
+				<div class="tab col-xs-4">
+					<h4>Fruits</h4>
+				</div>
+				<div class="tab col-xs-4">
+					<h4>Dairy</h4>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<div class="container">
+		<div id="veggiepanel" class="row"></div>
+	</div>
+	<nav id="bottombar" class="navbar navbar-default navbar-fixed-bottom">
+		<div class="container"></div>
+	</div>
+	<script type="text/javascript" src="cordova.js"></script>
 </body>
 </html>

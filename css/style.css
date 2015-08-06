@@ -1,0 +1,101 @@
+* {
+	font-family: 'Raleway', sans-serif;
+}
+
+body {
+	padding-top: 100px;
+	padding-bottom: 50px;
+}
+
+#header {
+	padding: 10px 0;
+}
+
+.logo {
+	width : 200px;
+	padding: 10px;
+	margin: 0 auto;
+}
+
+#tabs {
+	text-align: center;
+	border-top: thin #efefef solid;
+	border-bottom: thin #efefef solid;
+}
+
+#tabs .tab {
+	cursor: pointer;
+}
+
+#tabs .selected {
+	text-align: center;
+	background-color: #EFEFEF;
+}
+
+#veggiepanel {
+	margin: 25px 0;
+}
+
+.item {
+	text-align: center;
+	border-bottom: thin #efefef solid;
+}
+
+.item img {
+	margin: 0 auto;
+	height: 100px;
+}
+.item .qty {
+	margin: 5px 0;
+}
+
+.item .qty i {
+	font-size: 3em;
+	clear: both; 
+	float: center;
+	display: block;
+	cursor: pointer;
+	color: #333;
+}
+
+.item .qty .number {
+	font-size: 1.5em;
+	clear: both; 
+	float: center;
+	display: block;
+}
+
+
+#bottombar {
+	background-color: #3BB60F;
+	color: white;
+}
+
+#bottombar i {
+	font-size: 2em;
+	margin: 0 0.5em;
+}
+
+#bottombar .text {
+	font-size: 1.5em;
+	padding: 0.5em;
+}
+
+.cart-view {
+	text-align: left;
+	cursor: pointer;
+}
+
+.cart-view:focus {
+	background-color: blue;
+}
+
+.checkout {
+	text-align: center;
+	cursor: pointer;
+}
+
+.user-view {
+	text-align: right;
+	cursor: pointer;
+}

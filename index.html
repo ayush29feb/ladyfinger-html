@@ -152,46 +152,46 @@
    		var Product = React.createClass({
 			getInitialState : function(){
 				return {
-					amt : 0,
+					qty : 0,
 					inCart : false,
 					blur : 0
 				};
 			},
 			onUpClick : function(event){
 				this.setState({
-					amt : parseFloat(this.state.amt) + parseFloat(this.props.ticker),
+					qty : parseFloat(this.state.qty) + parseFloat(this.props.ticker),
 				});
 			},
 			onDownClick : function(event){
-				if(parseFloat(this.state.amt) - parseFloat(this.props.ticker) >= 0) {
+				if(parseFloat(this.state.qty) - parseFloat(this.props.ticker) >= 0) {
 					this.setState({
-						amt : parseFloat(this.state.amt) - parseFloat(this.props.ticker),
+						qty : parseFloat(this.state.qty) - parseFloat(this.props.ticker),
 					});
 				}
-				if(parseFloat(this.state.amt) - parseFloat(this.props.ticker) <= 0) {
+				if(parseFloat(this.state.qty) - parseFloat(this.props.ticker) <= 0) {
 					this.setState({
 						inCart : false,
 						blur : ''
 					})
 				}
 			},
-			toggleToCart : function() {
-				var blur = 'blur';
-				var amt = this.state.amt;
-				if(this.state.inCart) {
-					blur = '';
-					amt = 0;
-				} else {
-					if(amt <= 0) {
-						amt += parseFloat(this.state.amt) + parseFloat(this.props.ticker);
-					}
+			addItemToCart : function() {
+				var qty = this.state.qty;
+				if(qty <= 0) {
+					qty = parseFloat(this.props.ticker);
 				}
 				this.setState({
-					inCart : !this.state.inCart,
-					blur : blur,
-					amt : amt
+					inCart : true,
+					blur : 'blur',
+					qty : qty
 				});
-				this.props.addToCart.bind(this, { amt : 100 });
+			},
+			removeItemFromCart : function() {
+				this.setState({
+					inCart : false,
+					blur : '',
+					qty : 0
+				});
 			},
 			overlay : function() {
 				return (
@@ -200,8 +200,8 @@
 				   				<span className="plus-minus">-</span>
 				   			</div>
 				   			<div className="col-xs-6">			   							   			
-					   			<h3><strong>{this.state.amt}KG<br />{this.props.name}</strong></h3><br />
-								<a onClick={this.toggleToCart}>REMOVE</a>
+					   			<h3><strong>{this.state.qty}KG<br />{this.props.name}</strong></h3><br />
+								<a onClick={this.removeItemFromCart}>REMOVE</a>
 				   			</div>
 				   			<div className="col-xs-3" onClick={this.onUpClick}>
 				   				<span className="plus-minus">+</span>
@@ -220,11 +220,11 @@
 								</div>
 								<div className="qty col-xs-4">
 									<i className="fa fa-chevron-up" onClick={this.onUpClick}></i>
-									<span className="number">{this.state.amt} kg</span>
+									<span className="number">{this.state.qty} kg</span>
 									<i className="fa fa-chevron-down" onClick={this.onDownClick}></i>
 								</div>
 								<div className="addcart col-xs-2">
-									<i className="fa fa-cart-plus" onClick={this.toggleToCart}></i>
+									<i className="fa fa-cart-plus" onClick={this.addItemToCart}></i>
 								</div>
 							</div>
 							<If test={this.state.inCart}>

@@ -36,24 +36,6 @@ body {
 	margin: 25px 0;
 }
 
-.panel-enter {
-  opacity: 0.01;
-}
-
-.panel-enter.panel-enter-active {
-  opacity: 1;
-  transition: opacity 2s ease-in;
-}
-
-.panel-leave {
-	opacity: 1;
-}
-
-.panel-leave.panel-leave-active {
-  opacity: 0.01;
-  transition: opacity 0.1s ease-in;
-}
-
 .item {
 	text-align: center;
 	border-bottom: thin #efefef solid;
@@ -95,11 +77,13 @@ body {
 
 .item-enter {
   opacity: 0.01;
+  transform: translateY(10px);
 }
 
 .item-enter.item-enter-active {
   opacity: 1;
-  transition: opacity 0.5s ease-in;
+  transition: all 0.5s ease-in;
+  transform: translateX(0px);
 }
 
 .item-leave {

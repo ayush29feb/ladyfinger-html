@@ -51,9 +51,9 @@
 			render : function() {
 				return (
 					<div id="tabs" className="row">
-						<Tab selectionState="selected" title="Vegetables" />
-						<Tab title="Fruits"/>
-						<Tab title="Dairy"/>
+						<Tab selectionState={true} title="Vegetables" />
+						<Tab selectionState={false} title="Fruits"/>
+						<Tab selectionState={false} title="Dairy"/>
 					</div>
 				);
 			}
@@ -99,9 +99,7 @@
 				return (
 					<div className="container">
 						<div id="veggiepanel" className="row">
-							<ReactCSSTransitionGroup>
-								<ProductBox url={this.state.url} transitionName="panel" ref="box" />
-							</ReactCSSTransitionGroup>
+							<ProductBox url={this.state.url} />
 						</div>
 					</div>
 				);
@@ -139,7 +137,8 @@
    			render : function() {
    				var productNodes = this.props.data.map(function(product) {
 	   				return (
-	   					<Product key={product._id} photo={product.photo} rate={product.rate} ticker={product.ticker} name={product.name}/>
+	   					<Product key={product._id} photo={product.photo} rate={product.rate} 
+	   						ticker={product.ticker} name={product.name}/>
 					);
 	   			});
 	   			return (
@@ -181,15 +180,18 @@
 				var amt = this.state.amt;
 				if(this.state.inCart) {
 					blur = '';
-				}
-				if(amt <= 0) {
-					amt += parseFloat(this.state.amt) + parseFloat(this.props.ticker);
+					amt = 0;
+				} else {
+					if(amt <= 0) {
+						amt += parseFloat(this.state.amt) + parseFloat(this.props.ticker);
+					}
 				}
 				this.setState({
 					inCart : !this.state.inCart,
 					blur : blur,
 					amt : amt
 				});
+				this.props.addToCart.bind(this, { amt : 100 });
 			},
 			overlay : function() {
 				return (
@@ -235,14 +237,12 @@
    		});
 		
 		var BottomBar = React.createClass({
-			checkout : function() {
-				alert("Sold");
-			},
 			render : function() {
 				return (
-					<nav id="bottombar" className="navbar navbar-default navbar-fixed-bottom" onClick={this.checkout} >
+					<nav id="bottombar" className="navbar navbar-default navbar-fixed-bottom" 
+						onClick={this.props.checkout.bind(this, 'cool')} >
 						<div className="container">
-							<span>Checkout - Rs. 122</span>
+							<span>Checkout - Rs. {this.props.amt}</span>
 						</div>
 					</nav>
 				);
@@ -250,12 +250,30 @@
 		})
 
 		var App = React.createClass({
+			getInitialState : function() {
+				return {
+					panel : 'veggies',
+					cart : [],
+					totalAmt : 0
+				}
+			},
+			addToCart : function(item) {
+				var cart = this.state.cart;
+				cart.push(item);
+				this.setState({
+					cart : cart,
+					amt : this.state.amt + item.amt
+				});
+			},
+			checkout : function(msg) {
+				alert(msg);
+			},
 			render : function() {
 				return (
 					<div>
 						<Header />
 						<ProductPanel />
-						<BottomBar />
+						<BottomBar amt={this.state.totalAmt} checkout={this.checkout}/>
 					</div>
 				);
 			}
@@ -265,7 +283,6 @@
 			<App />,
 			document.body
 		);
-		// React.render( <BottomBar />, document.getElementById('bottombar'));
    	</script>
 </head>
 <body></body>

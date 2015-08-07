@@ -1,0 +1,17 @@
+Body
+	- Nav
+		- Logo
+		- Tabs
+			- Veggies
+			- Fruits
+			- Dairy
+	- Panels
+		- 
+	- Nav
+		- Checkout
+
+<App>
+	<TopNav />
+		
+	<Panels />
+	<BottomNav />

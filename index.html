@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
-	<script src="https://fb.me/react-with-addons-0.13.3.min.js"></script>
+	<script src="https://fb.me/react-with-addons-0.13.3.js"></script>
 	<script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
    	<script type="text/jsx">
@@ -29,6 +29,84 @@
 		});
 
 		var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
+		var Header = React.createClass({
+			render : function() {
+				return (
+					<nav className="navbar navbar-default navbar-fixed-top">
+						<div className="container">
+							<div id="header" className="row">
+								<div className="col-md-12">
+									<img src="img/logo.png" className="img-responsive logo" />
+								</div>
+							</div>
+							<NavTabs />
+						</div>
+					</nav>
+				);
+			}
+		});
+
+		var NavTabs = React.createClass({
+			getInitialState : function(){
+				return {
+					current : 'veggies'
+				}
+			},
+			render : function() {
+				return (
+					<div id="tabs" className="row">
+						<Tab selectionState="selected" title="Vegetables"/>
+						<Tab title="Fruits"/>
+						<Tab title="Dairy"/>
+					</div>
+				);
+			}
+		});
+
+		var Tab = React.createClass({
+			getInitialState : function() {
+				var state = {
+					selected : ''
+				};
+				if(this.props.selectionState) {
+					state.selected = 'selected';
+				}
+				return state;
+			},
+			render : function() {
+				return (
+					<div className={"tab " + this.state.selected + " col-xs-4"}>
+						<h4>{this.props.title}</h4>
+					</div>
+				);
+			}
+		})
+
+		var ProductPanel = React.createClass({
+			getInitialState : function() {
+				return {
+					category : 'veggies',
+					url : 'http://192.168.0.101:5000/api/v1/products/veggie'
+				}
+			},
+			changeScreen : function() {
+				this.setState({
+					url : 'http://192.168.0.101:5000/api/v1/products/' + 'fruit'
+				});
+			},
+			render : function() {
+				return (
+					<div className="container">
+						<div id="veggiepanel" className="row">
+							<ReactCSSTransitionGroup>
+								<ProductBox url={this.state.url} pollInterval={2000} transitionName="panel" ref="box" />
+							</ReactCSSTransitionGroup>
+						</div>
+					</div>
+				);
+			}
+		});
 
    		var ProductBox = React.createClass({
    			getInitialState : function() {
@@ -71,7 +149,7 @@
 	   			});
 	   			return (
 	   				<ReactCSSTransitionGroup transitionName="item">
-					{productNodes}
+						{productNodes}
 					</ReactCSSTransitionGroup>
 	   			);
 	   		}
@@ -160,43 +238,40 @@
    				);
    			}
    		});
+		
+		var BottomBar = React.createClass({
+			checkout : function() {
+				alert("Sold");
+			},
+			render : function() {
+				return (
+					<nav id="bottombar" className="navbar navbar-default navbar-fixed-bottom" onClick={this.checkout} >
+						<div className="container">
+							<span>Checkout - Rs. 122</span>
+						</div>
+					</nav>
+				);
+			}
+		})
+
+		var App = React.createClass({
+			render : function() {
+				return (
+					<div>
+						<Header />
+						<ProductPanel />
+						<BottomBar />
+					</div>
+				);
+			}
+		})
 
    		React.render(
-			<ProductBox url="http://192.168.0.102:5000/api/v1/products" pollInterval={2000} />,
-			document.getElementById('veggiepanel')
+			<App />,
+			document.body
 		);
 		// React.render( <BottomBar />, document.getElementById('bottombar'));
    	</script>
-	
 </head>
-<body>
-	<nav class="navbar navbar-default navbar-fixed-top">
-		<div class="container">
-			<div id="header" class="row">
-				<div class="col-md-12">
-					<img src="img/logo.png" class="img-responsive logo" />
-				</div>
-			</div>
-			<div id="tabs" class="row">
-				<div class="tab selected col-xs-4">
-					<h4>Vegetables</h4>
-				</div>
-				<div class="tab col-xs-4">
-					<h4>Fruits</h4>
-				</div>
-				<div class="tab col-xs-4">
-					<h4>Dairy</h4>
-				</div>
-			</div>
-		</div>
-	</nav>
-	<div class="container">
-		<div id="veggiepanel" class="row"></div>
-	</div>
-	<nav id="bottombar" class="navbar navbar-default navbar-fixed-bottom">
-		<div class="container">
-			<span>Checkout - Rs. 122</span>
-		</div>
-	</div>
-</body>
+<body></body>
 </html>

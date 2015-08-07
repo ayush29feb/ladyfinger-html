@@ -48,15 +48,10 @@
 		});
 
 		var NavTabs = React.createClass({
-			getInitialState : function(){
-				return {
-					current : 'veggies'
-				}
-			},
 			render : function() {
 				return (
 					<div id="tabs" className="row">
-						<Tab selectionState="selected" title="Vegetables"/>
+						<Tab selectionState="selected" title="Vegetables" />
 						<Tab title="Fruits"/>
 						<Tab title="Dairy"/>
 					</div>
@@ -74,9 +69,14 @@
 				}
 				return state;
 			},
+			handleClick : function() {
+				this.setState({
+					selected : 'selected'
+				});
+			},
 			render : function() {
 				return (
-					<div className={"tab " + this.state.selected + " col-xs-4"}>
+					<div className={"tab " + this.state.selected + " col-xs-4"} onClick={this.handleClick}>
 						<h4>{this.props.title}</h4>
 					</div>
 				);
@@ -100,7 +100,7 @@
 					<div className="container">
 						<div id="veggiepanel" className="row">
 							<ReactCSSTransitionGroup>
-								<ProductBox url={this.state.url} pollInterval={2000} transitionName="panel" ref="box" />
+								<ProductBox url={this.state.url} transitionName="panel" ref="box" />
 							</ReactCSSTransitionGroup>
 						</div>
 					</div>
@@ -110,11 +110,7 @@
 
    		var ProductBox = React.createClass({
    			getInitialState : function() {
-				return { data : [
-					{"_id":"55aa5c9811d4c6140c43c25c","type":"veggie","rate":"38","name":"Tomato","__v":0,"ticker":"0.25","photo":"tomato.png"},
-					{"_id":"55aa5c9811d4c614043c25c","type":"veggie","rate":"38","name":"Tomato","__v":0,"ticker":"0.25","photo":"potato.png"},
-					{"_id":"55aa5c9811dc6140c43c25c","type":"veggie","rate":"38","name":"Tomato","__v":0,"ticker":"0.25","photo":"ladyfinger.png"},
-					{"_id":"55a5c9811d4c6140c43c25c","type":"veggie","rate":"38","name":"Tomato","__v":0,"ticker":"0.25","photo":"onions.png"}] };
+				return { data : [] };
 			},
 			loadCommentsFromServer : function() {
 				$.ajax({
@@ -130,8 +126,7 @@
 				});
 			},
 			componentDidMount : function() {
-				//this.loadCommentsFromServer();
-				setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+				this.loadCommentsFromServer();
 			},
    			render : function() {
    				return (
@@ -199,18 +194,18 @@
 			overlay : function() {
 				return (
 				   		<div className="overlay">
-				   			<div className="col-xs-3">
-				   				<span className="plus-minus" onClick={this.onDownClick}>-</span>
+				   			<div className="col-xs-3" onClick={this.onDownClick}>
+				   				<span className="plus-minus">-</span>
 				   			</div>
 				   			<div className="col-xs-6">			   							   			
 					   			<h3><strong>{this.state.amt}KG<br />{this.props.name}</strong></h3><br />
 								<a onClick={this.toggleToCart}>REMOVE</a>
 				   			</div>
-				   			<div className="col-xs-3">
-				   				<span className="plus-minus" onClick={this.onUpClick}>+</span>
+				   			<div className="col-xs-3" onClick={this.onUpClick}>
+				   				<span className="plus-minus">+</span>
 				   			</div>
 						</div>
-					)
+					);
 			},
    			render : function () {
    				return (

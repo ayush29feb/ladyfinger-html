@@ -40,7 +40,7 @@
 									<img src="img/logo.png" className="img-responsive logo" />
 								</div>
 							</div>
-							<NavTabs />
+							<NavTabs curr={this.props.tab} changeTabs={this.props.changeTabs} />
 						</div>
 					</nav>
 				);
@@ -51,32 +51,26 @@
 			render : function() {
 				return (
 					<div id="tabs" className="row">
-						<Tab selectionState={true} title="Vegetables" />
-						<Tab selectionState={false} title="Fruits"/>
-						<Tab selectionState={false} title="Dairy"/>
+						<Tab curr={this.props.curr} tabName="veggie" title="Vegetables" changeTabs={this.props.changeTabs}/>
+						<Tab curr={this.props.curr} tabName="fruit" title="Fruits" changeTabs={this.props.changeTabs}/>
+						<Tab curr={this.props.curr} tabName="dairy" title="Dairy" changeTabs={this.props.changeTabs}/>
 					</div>
 				);
 			}
 		});
 
 		var Tab = React.createClass({
-			getInitialState : function() {
-				var state = {
-					selected : ''
-				};
-				if(this.props.selectionState) {
-					state.selected = 'selected';
-				}
-				return state;
-			},
 			handleClick : function() {
 				this.setState({
 					selected : 'selected'
 				});
 			},
 			render : function() {
+				var selected = '';
+				if(this.props.curr == this.props.tabName) selected = 'selected';
 				return (
-					<div className={"tab " + this.state.selected + " col-xs-4"} onClick={this.handleClick}>
+					<div className={"tab " + selected + " col-xs-4"} 
+						onClick={this.props.changeTabs.bind(this, this.props.tabName)}>
 						<h4>{this.props.title}</h4>
 					</div>
 				);
@@ -86,20 +80,14 @@
 		var ProductPanel = React.createClass({
 			getInitialState : function() {
 				return {
-					category : 'veggies',
-					url : 'http://192.168.0.101:5000/api/v1/products/veggie'
+					url : 'http://192.168.0.101:5000/api/v1/products/'
 				}
-			},
-			changeScreen : function() {
-				this.setState({
-					url : 'http://192.168.0.101:5000/api/v1/products/' + 'fruit'
-				});
 			},
 			render : function() {
 				return (
 					<div className="container">
 						<div id="veggiepanel" className="row">
-							<ProductBox url={this.state.url} />
+							<ProductBox url={this.state.url} tab={this.props.tab}/>
 						</div>
 					</div>
 				);
@@ -128,7 +116,7 @@
 			},
    			render : function() {
    				return (
-   					<ProductList data={this.state.data} />
+   					<ProductList data={this.state.data} tab={this.props.tab} />
    				);
    			}
    		});
@@ -137,8 +125,8 @@
    			render : function() {
    				var productNodes = this.props.data.map(function(product) {
 	   				return (
-	   					<Product key={product._id} photo={product.photo} rate={product.rate} 
-	   						ticker={product.ticker} name={product.name}/>
+	   						<Product key={product._id} photo={product.photo} rate={product.rate} 
+	   							ticker={product.ticker} name={product.name} />
 					);
 	   			});
 	   			return (
@@ -252,7 +240,7 @@
 		var App = React.createClass({
 			getInitialState : function() {
 				return {
-					panel : 'veggies',
+					tab : 'veggie',
 					cart : [],
 					totalAmt : 0
 				}
@@ -265,15 +253,20 @@
 					amt : this.state.amt + item.amt
 				});
 			},
+			changeTabs : function(tab) {
+				this.setState({
+					tab : tab
+				});
+			},
 			checkout : function(msg) {
 				alert(msg);
 			},
 			render : function() {
 				return (
 					<div>
-						<Header />
-						<ProductPanel />
-						<BottomBar amt={this.state.totalAmt} checkout={this.checkout}/>
+						<Header tab={this.state.tab} changeTabs={this.changeTabs} />
+						<ProductPanel tab={this.state.tab} />
+						<BottomBar amt={this.state.totalAmt} checkout={this.checkout} />
 					</div>
 				);
 			}

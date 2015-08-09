@@ -79,47 +79,23 @@
 
 		var ProductPanel = React.createClass({
 			getInitialState : function() {
-				return {
-					url : 'http://192.168.0.101:5000/api/v1/products/'
-				}
+				return { data : [] };
+			},
+			componentDidMount : function() {
+				this.setState({
+					data : [{_id: "55aa5c9811d4c6140c43c25c",type: "veggie",rate: "38",name: "Tomato",ticker: "0.25",photo: "tomato.png"}]
+				});
 			},
 			render : function() {
 				return (
 					<div className="container">
 						<div id="veggiepanel" className="row">
-							<ProductBox url={this.state.url} tab={this.props.tab}/>
+							<ProductList data={this.state.data} tab={this.props.tab} />
 						</div>
 					</div>
 				);
 			}
 		});
-
-   		var ProductBox = React.createClass({
-   			getInitialState : function() {
-				return { data : [] };
-			},
-			loadCommentsFromServer : function() {
-				$.ajax({
-					url : this.props.url,
-					dataType : 'json',
-					cache : false,
-					success: function(data) {
-						this.setState({data : data.products});
-					}.bind(this),
-					error: function(xhr, status, err) {
-						console.error(this.props.url, status, err.toString());
-					}.bind(this)
-				});
-			},
-			componentDidMount : function() {
-				this.loadCommentsFromServer();
-			},
-   			render : function() {
-   				return (
-   					<ProductList data={this.state.data} tab={this.props.tab} />
-   				);
-   			}
-   		});
 
    		var ProductList = React.createClass({
    			render : function() {
@@ -235,7 +211,7 @@
 					</nav>
 				);
 			}
-		})
+		});
 
 		var App = React.createClass({
 			getInitialState : function() {
@@ -265,12 +241,12 @@
 				return (
 					<div>
 						<Header tab={this.state.tab} changeTabs={this.changeTabs} />
-						<ProductPanel tab={this.state.tab} />
-						<BottomBar amt={this.state.totalAmt} checkout={this.checkout} />
+						<ProductPanel tab={this.state.tab} cart={this.state.cart}/>
+						<BottomBar amt={this.state.totalAmt} cart={this.state.cart} checkout={this.checkout} />
 					</div>
 				);
 			}
-		})
+		});
 
    		React.render(
 			<App />,

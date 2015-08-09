@@ -77,14 +77,29 @@
 			}
 		})
 
+		/**
+		** Sets the data in state for the given type prop
+		*/
 		var ProductPanel = React.createClass({
 			getInitialState : function() {
 				return { data : [] };
 			},
+			loadData : function(tab) {
+				if(tab == 'veggie') {
+					this.setState({
+						data : [{ _id: "55aa5c9811d4c6140c43c25c", type: "veggie", rate: "38", name: "Tomato", ticker: "0.25", photo: "tomato.png" }]
+					});
+				} else if(tab == 'fruit') {
+					this.setState({
+						data : [{ _id: "55aa5c9811d4c6143c43c25c", type: "veggie", rate: "38", name: "Apple", ticker: "0.25", photo: "Apples.png" }]
+					});
+				}	
+			},
+			componentWillReceiveProps : function(nextProps) {
+				this.loadData(nextProps.tab);
+			},
 			componentDidMount : function() {
-				this.setState({
-					data : [{_id: "55aa5c9811d4c6140c43c25c",type: "veggie",rate: "38",name: "Tomato",ticker: "0.25",photo: "tomato.png"}]
-				});
+				this.loadData(this.props.tab);
 			},
 			render : function() {
 				return (
@@ -216,7 +231,7 @@
 		var App = React.createClass({
 			getInitialState : function() {
 				return {
-					tab : 'veggie',
+					tab : 'fruit',
 					cart : [],
 					totalAmt : 0
 				}

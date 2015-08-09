@@ -86,14 +86,14 @@
 			},
 			loadData : function(tab) {
 				$.ajax({
-					url: 'http://192.168.0.100:5000/api/v1/products/' + tab,
+					url: 'http://192.168.1.6:5000/api/v1/products/' + tab,
 					dataType: 'json',
 					cache: false,
 					success: function(data) {
 						this.setState({data: data.products});
 					}.bind(this),
 					error: function(xhr, status, err) {
-						console.error('http://192.168.0.100:5000/api/v1/products/' + tab, status, err.toString());
+						console.error('http://192.168.1.6:5000/api/v1/products/' + tab, status, err.toString());
 					}.bind(this)
 				});
 			},
@@ -182,15 +182,9 @@
 			overlay : function() {
 				return (
 				   		<div className="overlay">
-				   			<div className="col-xs-3" onClick={this.onDownClick}>
-				   				<span className="plus-minus">-</span>
-				   			</div>
-				   			<div className="col-xs-6">			   							   			
+				   			<div className="col-xs-12">			   							   			
 					   			<h3><strong>{this.state.qty}KG<br />{this.props.name}</strong></h3><br />
 								<a onClick={this.removeItemFromCart}>REMOVE</a>
-				   			</div>
-				   			<div className="col-xs-3" onClick={this.onUpClick}>
-				   				<span className="plus-minus">+</span>
 				   			</div>
 						</div>
 					);
@@ -221,6 +215,7 @@
 								</div>
 								<div className="addcart col-xs-2">
 									<i className="fa fa-cart-plus" onClick={this.addItemToCart}></i>
+									<span>Add To Cart</span>
 								</div>
 							</div>
 							<If test={this.state.inCart}>
@@ -248,7 +243,7 @@
 		var App = React.createClass({
 			getInitialState : function() {
 				return {
-					tab : 'fruit',
+					tab : 'veggie',
 					cart : [],
 					totalAmt : 0
 				}

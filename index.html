@@ -85,21 +85,17 @@
 				return { data : [] };
 			},
 			loadData : function(tab) {
-				if(tab == 'veggie') {
-					this.setState({
-						data : [{ _id: "1", type: "veggie", rate: "38", name: "Tomato", ticker: "0.25", photo: "tomato.png" },
-								{ _id: "2", type: "veggie", rate: "38", name: "Tomato", ticker: "0.25", photo: "tomato.png" }]
-					});
-				} else if(tab == 'fruit') {
-					this.setState({
-						data : [{ _id: "3", type: "veggie", rate: "38", name: "Apple", ticker: "0.25", photo: "Apples.png" },
-								{ _id: "4", type: "veggie", rate: "38", name: "Apple", ticker: "0.25", photo: "Apples.png" }]
-					});
-				} else if(tab == 'dairy') {
-					this.setState({
-						data : [{ _id: "5", type: "veggie", rate: "38", name: "Onion", ticker: "0.25", photo: "onions.png" }]
-					})
-				}
+				$.ajax({
+					url: 'http://192.168.0.100:5000/api/v1/products/' + tab,
+					dataType: 'json',
+					cache: false,
+					success: function(data) {
+						this.setState({data: data.products});
+					}.bind(this),
+					error: function(xhr, status, err) {
+						console.error('http://192.168.0.100:5000/api/v1/products/' + tab, status, err.toString());
+					}.bind(this)
+				});
 			},
 			componentWillReceiveProps : function(nextProps) {
 				this.loadData(nextProps.tab);
@@ -306,7 +302,7 @@
 				});
 			},
 			checkout : function(msg) {
-				alert(msg);
+				console.log(this.state);
 			},
 			render : function() {
 				return (

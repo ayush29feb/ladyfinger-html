@@ -87,17 +87,17 @@
 			loadData : function(tab) {
 				if(tab == 'veggie') {
 					this.setState({
-						data : [{ _id: "55aa5c9811d4c6140c43c25c", type: "veggie", rate: "38", name: "Tomato", ticker: "0.25", photo: "tomato.png" },
-								{ _id: "55aa59811d4c6140c43c25c", type: "veggie", rate: "38", name: "Tomato", ticker: "0.25", photo: "tomato.png" }]
+						data : [{ _id: "1", type: "veggie", rate: "38", name: "Tomato", ticker: "0.25", photo: "tomato.png" },
+								{ _id: "2", type: "veggie", rate: "38", name: "Tomato", ticker: "0.25", photo: "tomato.png" }]
 					});
 				} else if(tab == 'fruit') {
 					this.setState({
-						data : [{ _id: "55aa5c9811d4c6143c43c25c", type: "veggie", rate: "38", name: "Apple", ticker: "0.25", photo: "Apples.png" },
-								{ _id: "55aa5c9811d4c613c43c25c", type: "veggie", rate: "38", name: "Apple", ticker: "0.25", photo: "Apples.png" }]
+						data : [{ _id: "3", type: "veggie", rate: "38", name: "Apple", ticker: "0.25", photo: "Apples.png" },
+								{ _id: "4", type: "veggie", rate: "38", name: "Apple", ticker: "0.25", photo: "Apples.png" }]
 					});
 				} else if(tab == 'dairy') {
 					this.setState({
-						data : [{ _id: "55aa5c981sd4c6143c43c25c", type: "veggie", rate: "38", name: "Onion", ticker: "0.25", photo: "onions.png" }]
+						data : [{ _id: "5", type: "veggie", rate: "38", name: "Onion", ticker: "0.25", photo: "onions.png" }]
 					})
 				}
 			},
@@ -144,22 +144,24 @@
 				};
 			},
 			onUpClick : function(event){
+				var qty = parseFloat(this.state.qty) + parseFloat(this.props.ticker)
 				this.setState({
-					qty : parseFloat(this.state.qty) + parseFloat(this.props.ticker),
+					qty : qty,
 				});
+				if(this.state.inCart) this.props.addToCart(this.props.id, qty, this.props.rate);
 			},
 			onDownClick : function(event){
-				if(parseFloat(this.state.qty) - parseFloat(this.props.ticker) >= 0) {
+				if(parseFloat(this.state.qty) - parseFloat(this.props.ticker) > 0) {
+					var qty = parseFloat(this.state.qty) - parseFloat(this.props.ticker);
 					this.setState({
-						qty : parseFloat(this.state.qty) - parseFloat(this.props.ticker),
+						qty : qty
 					});
+					if(this.state.inCart) this.props.addToCart(this.props.id, qty, this.props.rate);
 				}
 				if(parseFloat(this.state.qty) - parseFloat(this.props.ticker) <= 0) {
-					this.setState({
-						inCart : false,
-						blur : ''
-					})
+					this.removeItemFromCart();
 				}
+				
 			},
 			addItemToCart : function() {
 				var qty = this.state.qty;
@@ -171,7 +173,7 @@
 					blur : 'blur',
 					qty : qty
 				});
-				this.props.addToCart(this.props.id, this.state.qty, this.props.rate);
+				this.props.addToCart(this.props.id, qty, this.props.rate);
 			},
 			removeItemFromCart : function() {
 				this.setState({
@@ -179,6 +181,7 @@
 					blur : '',
 					qty : 0
 				});
+				this.props.addToCart(this.props.id, 0, 0);
 			},
 			overlay : function() {
 				return (
@@ -245,16 +248,37 @@
 				}
 			},
 			addToCart : function(id, qty, rate) {
-				var item = {
-					_id : id,
-					qty : qty,
-					rate : rate
-				};
 				var newCart = this.state.cart;
-				newCart.push(item),
+				var newTotalAmt = this.state.totalAmt;
+				// Old ID
+				var added = false;
+				for(var i in newCart) {
+					if(newCart[i].itemId == id) {
+						newTotalAmt -= newCart[i].qty * newCart[i].rate;
+						if(qty <= 0) {
+							newCart.splice(i, 1);
+							console.log(newCart);
+						} else {
+							newCart[i].qty = qty;
+							newCart[i].rate = rate;
+							newTotalAmt += qty * rate
+							added = true;
+						}
+					}
+				}
+				// New iD
+				if(!added && qty > 0) {
+					var item = {
+						itemId : id,
+						qty : qty,
+						rate : rate
+					};
+					newCart.push(item);
+					newTotalAmt += rate * qty;
+				}
 				this.setState({
 					cart : newCart,
-					totalAmt : this.state.totalAmt + item.rate * item.qty
+					totalAmt : newTotalAmt
 				});
 				console.log(this.state);
 			},

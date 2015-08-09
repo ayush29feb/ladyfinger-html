@@ -171,7 +171,7 @@
 					blur : 'blur',
 					qty : qty
 				});
-				this.props.addToCart(this.props.id, this.state.qty);
+				this.props.addToCart(this.props.id, this.state.qty, this.props.rate);
 			},
 			removeItemFromCart : function() {
 				this.setState({
@@ -244,17 +244,19 @@
 					totalAmt : 0
 				}
 			},
-			addToCart : function(id, amt) {
-				alert(id + " " + amt);
+			addToCart : function(id, qty, rate) {
 				var item = {
 					_id : id,
-					amt : amt
+					qty : qty,
+					rate : rate
 				};
+				var newCart = this.state.cart;
+				newCart.push(item),
 				this.setState({
-					cart : this.state.cart.push(item),
-					amt : this.state.amt + item.amt
+					cart : newCart,
+					totalAmt : this.state.totalAmt + item.rate * item.qty
 				});
-				console.log(this.state.cart);
+				console.log(this.state);
 			},
 			changeTabs : function(tab) {
 				this.setState({

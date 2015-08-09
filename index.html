@@ -86,14 +86,14 @@
 			},
 			loadData : function(tab) {
 				$.ajax({
-					url: 'http://192.168.1.6:5000/api/v1/products/' + tab,
+					url: 'http://192.168.0.102:5000/api/v1/products/' + tab,
 					dataType: 'json',
 					cache: false,
 					success: function(data) {
 						this.setState({data: data.products});
 					}.bind(this),
 					error: function(xhr, status, err) {
-						console.error('http://192.168.1.6:5000/api/v1/products/' + tab, status, err.toString());
+						console.error('http://192.168.0.102:5000/api/v1/products/' + tab, status, err.toString());
 					}.bind(this)
 				});
 			},
@@ -215,7 +215,7 @@
 								</div>
 								<div className="addcart col-xs-2">
 									<i className="fa fa-cart-plus" onClick={this.addItemToCart}></i>
-									<span>Add To Cart</span>
+									<span style={{display: 'block'}}>Add To Cart</span>
 								</div>
 							</div>
 							<If test={this.state.inCart}>
@@ -227,6 +227,18 @@
    			}
    		});
 		
+		var CheckoutCart = React.createClass({
+			render : function() {
+				return (
+					<div className="container">
+						<div id="veggiepanel" className="row">
+							Hellow World!
+						</div>
+					</div>
+				);
+			}
+		});
+
 		var BottomBar = React.createClass({
 			render : function() {
 				return (
@@ -245,7 +257,8 @@
 				return {
 					tab : 'veggie',
 					cart : [],
-					totalAmt : 0
+					totalAmt : 0,
+					checkoutPage : false
 				}
 			},
 			addToCart : function(id, qty, rate) {
@@ -298,14 +311,29 @@
 			},
 			checkout : function(msg) {
 				console.log(this.state);
+				this.setState({
+					checkoutPage : !this.state.checkoutPage
+				});
+			},
+			getPage : function() {
+				var result = {
+					header : (<Header tab={this.state.tab} changeTabs={this.changeTabs} key="header" />),
+					content : (<ProductPanel tab={this.state.tab} isInCart={this.isInCart} addToCart={this.addToCart} key="productpanel" />),
+					bottom : (<BottomBar amt={this.state.totalAmt} cart={this.state.cart} checkout={this.checkout} key="bottombar" />)
+				}
+				if(this.state.checkoutPage) {
+					result.content = (<CheckoutCart key="cart"/>);
+				}
+				return result;
 			},
 			render : function() {
+				var page = this.getPage();
 				return (
-					<div>
-						<Header tab={this.state.tab} changeTabs={this.changeTabs} />
-						<ProductPanel tab={this.state.tab} isInCart={this.isInCart} addToCart={this.addToCart} />
-						<BottomBar amt={this.state.totalAmt} cart={this.state.cart} checkout={this.checkout} />
-					</div>
+					<ReactCSSTransitionGroup transitionName="page">
+						{page.header}
+						{page.content}
+						{page.bottom}
+					</ReactCSSTransitionGroup>
 				);
 			}
 		});

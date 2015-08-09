@@ -6,6 +6,31 @@ body {
 	padding-top: 100px;
 	padding-bottom: 50px;
 }
+.page {
+
+}
+.page-enter {
+  opacity: 0.01;
+  transform: translateX(100%);
+}
+
+.page-enter.page-enter-active {
+  opacity: 1;
+  transition: all 0.5s ease-in;
+  transform: translateX(0);
+}
+
+.page-leave {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.page-leave.page-leave-active {
+	opacity: 0.01;
+	transition: all 0.5s ease-in;
+	transform: translateY(100%);
+
+}
 
 #header {
 	padding: 10px 0;

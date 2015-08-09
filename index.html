@@ -9,6 +9,7 @@
     <title>Ladyfinger</title>
 
     <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/material-form.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
@@ -106,7 +107,7 @@
 			render : function() {
 				return (
 					<div className="container">
-						<div id="veggiepanel" className="row">
+						<div id="contentpanel" className="row">
 							<ProductList data={this.state.data} tab={this.props.tab} addToCart={this.props.addToCart} isInCart={this.props.isInCart} />
 						</div>
 					</div>
@@ -231,9 +232,27 @@
 			render : function() {
 				return (
 					<div className="container">
-						<div id="veggiepanel" className="row">
-							Hellow World!
+						<div id="contentpanel" className="row">
+							<form>
+								<TextField label="Name" />
+								<TextField label="Address 1" />
+								<TextField label="Address 2" />
+								<TextField label="Landmark" />
+							</form>
 						</div>
+					</div>
+				);
+			}
+		});
+
+		var TextField = React.createClass({
+			render : function() {
+				return (
+					<div className="group">      
+						<input type="text" required />
+						<span className="highlight"></span>
+						<span className="bar"></span>
+						<label>{this.props.label}</label>
 					</div>
 				);
 			}
@@ -258,7 +277,7 @@
 					tab : 'veggie',
 					cart : [],
 					totalAmt : 0,
-					checkoutPage : false
+					checkoutPage : true
 				}
 			},
 			addToCart : function(id, qty, rate) {

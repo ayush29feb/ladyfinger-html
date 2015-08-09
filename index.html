@@ -111,7 +111,7 @@
 				return (
 					<div className="container">
 						<div id="veggiepanel" className="row">
-							<ProductList data={this.state.data} tab={this.props.tab} addToCart={this.props.addToCart} />
+							<ProductList data={this.state.data} tab={this.props.tab} addToCart={this.props.addToCart} isInCart={this.props.isInCart} />
 						</div>
 					</div>
 				);
@@ -122,7 +122,7 @@
    			getProduct : function(product) {
    				return (
 					<Product key={product._id} id={product._id} photo={product.photo} rate={product.rate} 
-						ticker={product.ticker} name={product.name} addToCart={this.props.addToCart} />
+						ticker={product.ticker} name={product.name} addToCart={this.props.addToCart} isInCart={this.props.isInCart} />
 				);
    			},
    			render : function() {
@@ -198,6 +198,16 @@
 				   			</div>
 						</div>
 					);
+			},
+			componentDidMount : function() {
+				var qty = this.props.isInCart(this.props.id);
+				if(qty > 0) {
+					this.setState({
+						qty : qty,
+						blur : 'blur',
+						inCart : true
+					})
+				}
 			},
    			render : function () {
    				return (
@@ -282,6 +292,14 @@
 				});
 				console.log(this.state);
 			},
+			isInCart : function(id) {
+				for(var i in this.state.cart) {
+					if(this.state.cart[i].itemId == id) {
+						return this.state.cart[i].qty;
+					}
+				}
+				return 0;
+			},
 			changeTabs : function(tab) {
 				this.setState({
 					tab : tab
@@ -294,7 +312,7 @@
 				return (
 					<div>
 						<Header tab={this.state.tab} changeTabs={this.changeTabs} />
-						<ProductPanel tab={this.state.tab} cart={this.state.cart} addToCart={this.addToCart} />
+						<ProductPanel tab={this.state.tab} isInCart={this.isInCart} addToCart={this.addToCart} />
 						<BottomBar amt={this.state.totalAmt} cart={this.state.cart} checkout={this.checkout} />
 					</div>
 				);

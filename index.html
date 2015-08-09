@@ -87,13 +87,19 @@
 			loadData : function(tab) {
 				if(tab == 'veggie') {
 					this.setState({
-						data : [{ _id: "55aa5c9811d4c6140c43c25c", type: "veggie", rate: "38", name: "Tomato", ticker: "0.25", photo: "tomato.png" }]
+						data : [{ _id: "55aa5c9811d4c6140c43c25c", type: "veggie", rate: "38", name: "Tomato", ticker: "0.25", photo: "tomato.png" },
+								{ _id: "55aa59811d4c6140c43c25c", type: "veggie", rate: "38", name: "Tomato", ticker: "0.25", photo: "tomato.png" }]
 					});
 				} else if(tab == 'fruit') {
 					this.setState({
-						data : [{ _id: "55aa5c9811d4c6143c43c25c", type: "veggie", rate: "38", name: "Apple", ticker: "0.25", photo: "Apples.png" }]
+						data : [{ _id: "55aa5c9811d4c6143c43c25c", type: "veggie", rate: "38", name: "Apple", ticker: "0.25", photo: "Apples.png" },
+								{ _id: "55aa5c9811d4c613c43c25c", type: "veggie", rate: "38", name: "Apple", ticker: "0.25", photo: "Apples.png" }]
 					});
-				}	
+				} else if(tab == 'dairy') {
+					this.setState({
+						data : [{ _id: "55aa5c981sd4c6143c43c25c", type: "veggie", rate: "38", name: "Onion", ticker: "0.25", photo: "onions.png" }]
+					})
+				}
 			},
 			componentWillReceiveProps : function(nextProps) {
 				this.loadData(nextProps.tab);
@@ -105,7 +111,7 @@
 				return (
 					<div className="container">
 						<div id="veggiepanel" className="row">
-							<ProductList data={this.state.data} tab={this.props.tab} />
+							<ProductList data={this.state.data} tab={this.props.tab} addToCart={this.props.addToCart} />
 						</div>
 					</div>
 				);
@@ -113,13 +119,14 @@
 		});
 
    		var ProductList = React.createClass({
+   			getProduct : function(product) {
+   				return (
+					<Product key={product._id} id={product._id} photo={product.photo} rate={product.rate} 
+						ticker={product.ticker} name={product.name} addToCart={this.props.addToCart} />
+				);
+   			},
    			render : function() {
-   				var productNodes = this.props.data.map(function(product) {
-	   				return (
-	   						<Product key={product._id} photo={product.photo} rate={product.rate} 
-	   							ticker={product.ticker} name={product.name} />
-					);
-	   			});
+   				var productNodes = this.props.data.map(this.getProduct);
 	   			return (
 	   				<ReactCSSTransitionGroup transitionName="item">
 						{productNodes}
@@ -164,6 +171,7 @@
 					blur : 'blur',
 					qty : qty
 				});
+				this.props.addToCart(this.props.id, this.state.qty);
 			},
 			removeItemFromCart : function() {
 				this.setState({
@@ -236,13 +244,17 @@
 					totalAmt : 0
 				}
 			},
-			addToCart : function(item) {
-				var cart = this.state.cart;
-				cart.push(item);
+			addToCart : function(id, amt) {
+				alert(id + " " + amt);
+				var item = {
+					_id : id,
+					amt : amt
+				};
 				this.setState({
-					cart : cart,
+					cart : this.state.cart.push(item),
 					amt : this.state.amt + item.amt
 				});
+				console.log(this.state.cart);
 			},
 			changeTabs : function(tab) {
 				this.setState({
@@ -256,7 +268,7 @@
 				return (
 					<div>
 						<Header tab={this.state.tab} changeTabs={this.changeTabs} />
-						<ProductPanel tab={this.state.tab} cart={this.state.cart}/>
+						<ProductPanel tab={this.state.tab} cart={this.state.cart} addToCart={this.addToCart} />
 						<BottomBar amt={this.state.totalAmt} cart={this.state.cart} checkout={this.checkout} />
 					</div>
 				);

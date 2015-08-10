@@ -1,7 +1,6 @@
 /* form starting stylings ------------------------------- */
 form {
-  margin: 5px auto;
-  width: 300px;
+  margin: 5px 0;
 }
 form .group { 
   position:relative; 

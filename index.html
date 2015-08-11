@@ -16,6 +16,8 @@
 	<script src="https://fb.me/react-with-addons-0.13.3.js"></script>
 	<script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/jsx" src="js/app.react.js"></script>
+    <script type="text/jsx" src="js/order.react.js"></script>
    	<script type="text/jsx">
    		
    		var If = React.createClass({
@@ -31,202 +33,202 @@
 
 		var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
-		var Header = React.createClass({
-			render : function() {
-				return (
-					<nav className="navbar navbar-default navbar-fixed-top">
-						<div className="container">
-							<div id="header" className="row">
-								<div className="col-md-12">
-									<img src="img/logo.png" className="img-responsive logo" />
-								</div>
-							</div>
-							<NavTabs curr={this.props.tab} changeTabs={this.props.changeTabs} />
-						</div>
-					</nav>
-				);
-			}
-		});
+		// var Header = React.createClass({
+		// 	render : function() {
+		// 		return (
+		// 			<nav className="navbar navbar-default navbar-fixed-top">
+		// 				<div className="container">
+		// 					<div id="header" className="row">
+		// 						<div className="col-md-12">
+		// 							<img src="img/logo.png" className="img-responsive logo" />
+		// 						</div>
+		// 					</div>
+		// 					<NavTabs curr={this.props.tab} changeTabs={this.props.changeTabs} />
+		// 				</div>
+		// 			</nav>
+		// 		);
+		// 	}
+		// });
 
-		var NavTabs = React.createClass({
-			render : function() {
-				return (
-					<div id="tabs" className="row">
-						<Tab curr={this.props.curr} tabName="veggie" title="Vegetables" changeTabs={this.props.changeTabs}/>
-						<Tab curr={this.props.curr} tabName="fruit" title="Fruits" changeTabs={this.props.changeTabs}/>
-						<Tab curr={this.props.curr} tabName="dairy" title="Dairy" changeTabs={this.props.changeTabs}/>
-					</div>
-				);
-			}
-		});
+		// var NavTabs = React.createClass({
+		// 	render : function() {
+		// 		return (
+		// 			<div id="tabs" className="row">
+		// 				<Tab curr={this.props.curr} tabName="veggie" title="Vegetables" changeTabs={this.props.changeTabs}/>
+		// 				<Tab curr={this.props.curr} tabName="fruit" title="Fruits" changeTabs={this.props.changeTabs}/>
+		// 				<Tab curr={this.props.curr} tabName="dairy" title="Dairy" changeTabs={this.props.changeTabs}/>
+		// 			</div>
+		// 		);
+		// 	}
+		// });
 
-		var Tab = React.createClass({
-			handleClick : function() {
-				this.setState({
-					selected : 'selected'
-				});
-			},
-			render : function() {
-				var selected = '';
-				if(this.props.curr == this.props.tabName) selected = 'selected';
-				return (
-					<div className={"tab " + selected + " col-xs-4"} 
-						onClick={this.props.changeTabs.bind(this, this.props.tabName)}>
-						<h4>{this.props.title}</h4>
-					</div>
-				);
-			}
-		})
+		// var Tab = React.createClass({
+		// 	handleClick : function() {
+		// 		this.setState({
+		// 			selected : 'selected'
+		// 		});
+		// 	},
+		// 	render : function() {
+		// 		var selected = '';
+		// 		if(this.props.curr == this.props.tabName) selected = 'selected';
+		// 		return (
+		// 			<div className={"tab " + selected + " col-xs-4"} 
+		// 				onClick={this.props.changeTabs.bind(this, this.props.tabName)}>
+		// 				<h4>{this.props.title}</h4>
+		// 			</div>
+		// 		);
+		// 	}
+		// })
 
 		/**
 		** Sets the data in state for the given type prop
 		*/
-		var ProductPanel = React.createClass({
-			getInitialState : function() {
-				return { data : [] };
-			},
-			loadData : function(tab) {
-				$.ajax({
-					url: 'http://192.168.0.100:5000/api/v1/products/' + tab,
-					dataType: 'json',
-					cache: false,
-					success: function(data) {
-						this.setState({data: data.products});
-					}.bind(this),
-					error: function(xhr, status, err) {
-						console.error('http://192.168.0.102:5000/api/v1/products/' + tab, status, err.toString());
-					}.bind(this)
-				});
-			},
-			componentWillReceiveProps : function(nextProps) {
-				this.loadData(nextProps.tab);
-			},
-			componentDidMount : function() {
-				this.loadData(this.props.tab);
-			},
-			render : function() {
-				return (
-					<div className="container">
-						<div id="contentpanel" className="row">
-							<ProductList data={this.state.data} tab={this.props.tab} addToCart={this.props.addToCart} isInCart={this.props.isInCart} />
-						</div>
-					</div>
-				);
-			}
-		});
+		// var ProductPanel = React.createClass({
+		// 	getInitialState : function() {
+		// 		return { data : [] };
+		// 	},
+		// 	loadData : function(tab) {
+		// 		$.ajax({
+		// 			url: 'http://192.168.0.100:5000/api/v1/products/' + tab,
+		// 			dataType: 'json',
+		// 			cache: false,
+		// 			success: function(data) {
+		// 				this.setState({data: data.products});
+		// 			}.bind(this),
+		// 			error: function(xhr, status, err) {
+		// 				console.error('http://192.168.0.102:5000/api/v1/products/' + tab, status, err.toString());
+		// 			}.bind(this)
+		// 		});
+		// 	},
+		// 	componentWillReceiveProps : function(nextProps) {
+		// 		this.loadData(nextProps.tab);
+		// 	},
+		// 	componentDidMount : function() {
+		// 		this.loadData(this.props.tab);
+		// 	},
+		// 	render : function() {
+		// 		return (
+		// 			<div className="container">
+		// 				<div id="contentpanel" className="row">
+		// 					<ProductList data={this.state.data} tab={this.props.tab} addToCart={this.props.addToCart} isInCart={this.props.isInCart} />
+		// 				</div>
+		// 			</div>
+		// 		);
+		// 	}
+		// });
 
-   		var ProductList = React.createClass({
-   			getProduct : function(product) {
-   				return (
-					<Product key={product._id} id={product._id} photo={product.photo} rate={product.rate} 
-						ticker={product.ticker} name={product.name} addToCart={this.props.addToCart} isInCart={this.props.isInCart} />
-				);
-   			},
-   			render : function() {
-   				var productNodes = this.props.data.map(this.getProduct);
-	   			return (
-	   				<ReactCSSTransitionGroup transitionName="item">
-						{productNodes}
-					</ReactCSSTransitionGroup>
-	   			);
-	   		}
-   		});
+  //  		var ProductList = React.createClass({
+  //  			getProduct : function(product) {
+  //  				return (
+		// 			<Product key={product._id} id={product._id} photo={product.photo} rate={product.rate} 
+		// 				ticker={product.ticker} name={product.name} addToCart={this.props.addToCart} isInCart={this.props.isInCart} />
+		// 		);
+  //  			},
+  //  			render : function() {
+  //  				var productNodes = this.props.data.map(this.getProduct);
+	 //   			return (
+	 //   				<ReactCSSTransitionGroup transitionName="item">
+		// 				{productNodes}
+		// 			</ReactCSSTransitionGroup>
+	 //   			);
+	 //   		}
+  //  		});
 
-   		var Product = React.createClass({
-			getInitialState : function(){
-				return {
-					qty : 0,
-					inCart : false,
-					blur : 0
-				};
-			},
-			onUpClick : function(event){
-				var qty = parseFloat(this.state.qty) + parseFloat(this.props.ticker)
-				this.setState({
-					qty : qty,
-				});
-				if(this.state.inCart) this.props.addToCart(this.props.id, qty, this.props.rate);
-			},
-			onDownClick : function(event){
-				if(parseFloat(this.state.qty) - parseFloat(this.props.ticker) > 0) {
-					var qty = parseFloat(this.state.qty) - parseFloat(this.props.ticker);
-					this.setState({
-						qty : qty
-					});
-					if(this.state.inCart) this.props.addToCart(this.props.id, qty, this.props.rate);
-				}
-				if(parseFloat(this.state.qty) - parseFloat(this.props.ticker) <= 0) {
-					this.removeItemFromCart();
-				}
+  //  		var Product = React.createClass({
+		// 	getInitialState : function(){
+		// 		return {
+		// 			qty : 0,
+		// 			inCart : false,
+		// 			blur : 0
+		// 		};
+		// 	},
+		// 	onUpClick : function(event){
+		// 		var qty = parseFloat(this.state.qty) + parseFloat(this.props.ticker)
+		// 		this.setState({
+		// 			qty : qty,
+		// 		});
+		// 		if(this.state.inCart) this.props.addToCart(this.props.id, qty, this.props.rate);
+		// 	},
+		// 	onDownClick : function(event){
+		// 		if(parseFloat(this.state.qty) - parseFloat(this.props.ticker) > 0) {
+		// 			var qty = parseFloat(this.state.qty) - parseFloat(this.props.ticker);
+		// 			this.setState({
+		// 				qty : qty
+		// 			});
+		// 			if(this.state.inCart) this.props.addToCart(this.props.id, qty, this.props.rate);
+		// 		}
+		// 		if(parseFloat(this.state.qty) - parseFloat(this.props.ticker) <= 0) {
+		// 			this.removeItemFromCart();
+		// 		}
 				
-			},
-			addItemToCart : function() {
-				var qty = this.state.qty;
-				if(qty <= 0) {
-					qty = parseFloat(this.props.ticker);
-				}
-				this.setState({
-					inCart : true,
-					blur : 'blur',
-					qty : qty
-				});
-				this.props.addToCart(this.props.id, qty, this.props.rate);
-			},
-			removeItemFromCart : function() {
-				this.setState({
-					inCart : false,
-					blur : '',
-					qty : 0
-				});
-				this.props.addToCart(this.props.id, 0, 0);
-			},
-			overlay : function() {
-				return (
-				   		<div className="overlay">
-				   			<div className="col-xs-12">			   							   			
-					   			<h3><strong>{this.state.qty}KG<br />{this.props.name}</strong></h3><br />
-								<a onClick={this.removeItemFromCart}>REMOVE</a>
-				   			</div>
-						</div>
-					);
-			},
-			componentDidMount : function() {
-				var qty = this.props.isInCart(this.props.id);
-				if(qty > 0) {
-					this.setState({
-						qty : qty,
-						blur : 'blur',
-						inCart : true
-					})
-				}
-			},
-   			render : function () {
-   				return (
-   					<div className="item col-md-4 col-sm-6 col-xs-12">
-						<div className="row">
-							<div className={this.state.blur}>
-								<div className="showcase col-xs-6" onClick={this.onUpClick}>
-									<img src={"img/products/" + this.props.photo} className="img-responsive" />
-									<h4>Rs. {this.props.rate} / kg</h4>
-								</div>
-								<div className="qty col-xs-4">
-									<i className="fa fa-chevron-up" onClick={this.onUpClick}></i>
-									<span className="number">{this.state.qty} kg</span>
-									<i className="fa fa-chevron-down" onClick={this.onDownClick}></i>
-								</div>
-								<div className="addcart col-xs-2">
-									<i className="fa fa-cart-plus" onClick={this.addItemToCart}></i>
-									<span style={{display: 'block'}}>Add To Cart</span>
-								</div>
-							</div>
-							<If test={this.state.inCart}>
-								{this.overlay()}
-							</If>
-						</div>
-					</div>
-   				);
-   			}
-   		});
+		// 	},
+		// 	addItemToCart : function() {
+		// 		var qty = this.state.qty;
+		// 		if(qty <= 0) {
+		// 			qty = parseFloat(this.props.ticker);
+		// 		}
+		// 		this.setState({
+		// 			inCart : true,
+		// 			blur : 'blur',
+		// 			qty : qty
+		// 		});
+		// 		this.props.addToCart(this.props.id, qty, this.props.rate);
+		// 	},
+		// 	removeItemFromCart : function() {
+		// 		this.setState({
+		// 			inCart : false,
+		// 			blur : '',
+		// 			qty : 0
+		// 		});
+		// 		this.props.addToCart(this.props.id, 0, 0);
+		// 	},
+		// 	overlay : function() {
+		// 		return (
+		// 		   		<div className="overlay">
+		// 		   			<div className="col-xs-12">			   							   			
+		// 			   			<h3><strong>{this.state.qty}KG<br />{this.props.name}</strong></h3><br />
+		// 						<a onClick={this.removeItemFromCart}>REMOVE</a>
+		// 		   			</div>
+		// 				</div>
+		// 			);
+		// 	},
+		// 	componentDidMount : function() {
+		// 		var qty = this.props.isInCart(this.props.id);
+		// 		if(qty > 0) {
+		// 			this.setState({
+		// 				qty : qty,
+		// 				blur : 'blur',
+		// 				inCart : true
+		// 			})
+		// 		}
+		// 	},
+  //  			render : function () {
+  //  				return (
+  //  					<div className="item col-md-4 col-sm-6 col-xs-12">
+		// 				<div className="row">
+		// 					<div className={this.state.blur}>
+		// 						<div className="showcase col-xs-6" onClick={this.onUpClick}>
+		// 							<img src={"img/products/" + this.props.photo} className="img-responsive" />
+		// 							<h4>Rs. {this.props.rate} / kg</h4>
+		// 						</div>
+		// 						<div className="qty col-xs-4">
+		// 							<i className="fa fa-chevron-up" onClick={this.onUpClick}></i>
+		// 							<span className="number">{this.state.qty} kg</span>
+		// 							<i className="fa fa-chevron-down" onClick={this.onDownClick}></i>
+		// 						</div>
+		// 						<div className="addcart col-xs-2">
+		// 							<i className="fa fa-cart-plus" onClick={this.addItemToCart}></i>
+		// 							<span style={{display: 'block'}}>Add To Cart</span>
+		// 						</div>
+		// 					</div>
+		// 					<If test={this.state.inCart}>
+		// 						{this.overlay()}
+		// 					</If>
+		// 				</div>
+		// 			</div>
+  //  				);
+  //  			}
+  //  		});
 		
 		var CheckoutCart = React.createClass({
 			render : function() {
@@ -265,104 +267,104 @@
 			}
 		});
 
-		var BottomBar = React.createClass({
-			render : function() {
-				return (
-					<nav id="bottombar" className="navbar navbar-default navbar-fixed-bottom" 
-						onClick={this.props.checkout.bind(this, 'cool')} >
-						<div className="container">
-							<span>Checkout - Rs. {this.props.amt}</span>
-						</div>
-					</nav>
-				);
-			}
-		});
+		// var BottomBar = React.createClass({
+		// 	render : function() {
+		// 		return (
+		// 			<nav id="bottombar" className="navbar navbar-default navbar-fixed-bottom" 
+		// 				onClick={this.props.checkout.bind(this, 'cool')} >
+		// 				<div className="container">
+		// 					<span>Checkout - Rs. {this.props.amt}</span>
+		// 				</div>
+		// 			</nav>
+		// 		);
+		// 	}
+		// });
 
-		var App = React.createClass({
-			getInitialState : function() {
-				return {
-					tab : 'veggie',
-					cart : [],
-					totalAmt : 0,
-					checkoutPage : true
-				}
-			},
-			addToCart : function(id, qty, rate) {
-				var newCart = this.state.cart;
-				var newTotalAmt = this.state.totalAmt;
-				// Old ID
-				var added = false;
-				for(var i in newCart) {
-					if(newCart[i].itemId == id) {
-						newTotalAmt -= newCart[i].qty * newCart[i].rate;
-						if(qty <= 0) {
-							newCart.splice(i, 1);
-							console.log(newCart);
-						} else {
-							newCart[i].qty = qty;
-							newCart[i].rate = rate;
-							newTotalAmt += qty * rate
-							added = true;
-						}
-					}
-				}
-				// New iD
-				if(!added && qty > 0) {
-					var item = {
-						itemId : id,
-						qty : qty,
-						rate : rate
-					};
-					newCart.push(item);
-					newTotalAmt += rate * qty;
-				}
-				this.setState({
-					cart : newCart,
-					totalAmt : newTotalAmt
-				});
-				console.log(this.state);
-			},
-			isInCart : function(id) {
-				for(var i in this.state.cart) {
-					if(this.state.cart[i].itemId == id) {
-						return this.state.cart[i].qty;
-					}
-				}
-				return 0;
-			},
-			changeTabs : function(tab) {
-				this.setState({
-					tab : tab
-				});
-			},
-			checkout : function(msg) {
-				console.log(this.state);
-				this.setState({
-					checkoutPage : !this.state.checkoutPage
-				});
-			},
-			getPage : function() {
-				var result = {
-					header : (<Header tab={this.state.tab} changeTabs={this.changeTabs} key="header" />),
-					content : (<ProductPanel tab={this.state.tab} isInCart={this.isInCart} addToCart={this.addToCart} key="productpanel" />),
-					bottom : (<BottomBar amt={this.state.totalAmt} cart={this.state.cart} checkout={this.checkout} key="bottombar" />)
-				}
-				if(this.state.checkoutPage) {
-					result.content = (<CheckoutCart key="cart"/>);
-				}
-				return result;
-			},
-			render : function() {
-				var page = this.getPage();
-				return (
-					<ReactCSSTransitionGroup transitionName="page">
-						{page.header}
-						{page.content}
-						{page.bottom}
-					</ReactCSSTransitionGroup>
-				);
-			}
-		});
+		// var App = React.createClass({
+		// 	getInitialState : function() {
+		// 		return {
+		// 			tab : 'veggie',
+		// 			cart : [],
+		// 			totalAmt : 0,
+		// 			checkoutPage : true
+		// 		}
+		// 	},
+		// 	addToCart : function(id, qty, rate) {
+		// 		var newCart = this.state.cart;
+		// 		var newTotalAmt = this.state.totalAmt;
+		// 		// Old ID
+		// 		var added = false;
+		// 		for(var i in newCart) {
+		// 			if(newCart[i].itemId == id) {
+		// 				newTotalAmt -= newCart[i].qty * newCart[i].rate;
+		// 				if(qty <= 0) {
+		// 					newCart.splice(i, 1);
+		// 					console.log(newCart);
+		// 				} else {
+		// 					newCart[i].qty = qty;
+		// 					newCart[i].rate = rate;
+		// 					newTotalAmt += qty * rate
+		// 					added = true;
+		// 				}
+		// 			}
+		// 		}
+		// 		// New iD
+		// 		if(!added && qty > 0) {
+		// 			var item = {
+		// 				itemId : id,
+		// 				qty : qty,
+		// 				rate : rate
+		// 			};
+		// 			newCart.push(item);
+		// 			newTotalAmt += rate * qty;
+		// 		}
+		// 		this.setState({
+		// 			cart : newCart,
+		// 			totalAmt : newTotalAmt
+		// 		});
+		// 		console.log(this.state);
+		// 	},
+		// 	isInCart : function(id) {
+		// 		for(var i in this.state.cart) {
+		// 			if(this.state.cart[i].itemId == id) {
+		// 				return this.state.cart[i].qty;
+		// 			}
+		// 		}
+		// 		return 0;
+		// 	},
+		// 	changeTabs : function(tab) {
+		// 		this.setState({
+		// 			tab : tab
+		// 		});
+		// 	},
+		// 	checkout : function(msg) {
+		// 		console.log(this.state);
+		// 		this.setState({
+		// 			checkoutPage : !this.state.checkoutPage
+		// 		});
+		// 	},
+		// 	getPage : function() {
+		// 		var result = {
+		// 			header : (<Header tab={this.state.tab} changeTabs={this.changeTabs} key="header" />),
+		// 			content : (<ProductPanel tab={this.state.tab} isInCart={this.isInCart} addToCart={this.addToCart} key="productpanel" />),
+		// 			bottom : (<BottomBar amt={this.state.totalAmt} cart={this.state.cart} checkout={this.checkout} key="bottombar" />)
+		// 		}
+		// 		if(this.state.checkoutPage) {
+		// 			result.content = (<CheckoutCart key="cart"/>);
+		// 		}
+		// 		return result;
+		// 	},
+		// 	render : function() {
+		// 		var page = this.getPage();
+		// 		return (
+		// 			<ReactCSSTransitionGroup transitionName="page">
+		// 				{page.header}
+		// 				{page.content}
+		// 				{page.bottom}
+		// 			</ReactCSSTransitionGroup>
+		// 		);
+		// 	}
+		// });
 
    		React.render(
 			<App />,

@@ -15,7 +15,7 @@ var App = React.createClass({
 			}
 		}
 	},
-	addToCart : function(id, qty, rate) {
+	addToCart : function(id, details, qty, rate) {
 		var newItems = this.state.cart.items;
 		var newTotalAmt = this.state.cart.totalAmt;
 		// Old ID
@@ -38,6 +38,7 @@ var App = React.createClass({
 		if(!added && qty > 0) {
 			var item = {
 				itemId : id,
+				details : details,
 				qty : qty,
 				rate : rate
 			};
@@ -90,7 +91,7 @@ var App = React.createClass({
 			result.content = (<ProductPanel tab={this.state.page.tabs[this.state.page.activeIndex]} isInCart={this.isInCart} addToCart={this.addToCart} key="productpanel" />);
 			result.bottom = (<BottomBar text={"Checkout Rs." + this.state.cart.totalAmt} action={this.checkout} key="bottombar" />);
 		} else if(this.state.page.name == 'CHECKOUT') {
-			result.content = (<CheckoutCart key="cart" />);
+			result.content = (<CheckoutCart cart={this.state.cart} key="cart" />);
 			result.bottom = (<BottomBar text="Place Order" action={this.placeOrder} key="bottombar" />);
 		}
 		return result;
@@ -114,7 +115,7 @@ var Header = React.createClass({
 				<div className="container">
 					<div id="header" className="row">
 						<div className="col-md-12">
-							<img src="img/logo.png" className="img-responsive logo" />
+							<img id="logo" src="img/jutebaglogo.png"/>
 						</div>
 					</div>
 					<NavTabs page={this.props.page} changeTabs={this.props.changeTabs} />
@@ -150,7 +151,7 @@ var Tab = React.createClass({
 		return (
 			<div className={"tab " + selected + " col-xs-" + this.props.size} 
 				onClick={this.props.changeTabs.bind(this, this.props.index)}>
-				<h4>{this.props.title}</h4>
+				<h5>{this.props.title}</h5>
 			</div>
 		);
 	}

@@ -91,7 +91,11 @@ var Product = React.createClass({
 			blur : 'blur',
 			qty : qty
 		});
-		this.props.addToCart(this.props.id, qty, this.props.rate);
+		var details = {
+			name : this.props.name,
+			photo : this.props.photo
+		};
+		this.props.addToCart(this.props.id, details, qty, this.props.rate);
 	},
 	removeItemFromCart : function() {
 		this.setState({

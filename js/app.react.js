@@ -71,7 +71,7 @@ var App = React.createClass({
 	checkout : function() {
 		var newPage = this.state.page;
 		newPage.name = 'CHECKOUT';
-		newPage.tabs = ['Go Back'];
+		newPage.tabs = ['Continue Shopping'];
 		newPage.activeIndex = 0;
 		this.setState({
 			page : newPage
@@ -168,3 +168,17 @@ var BottomBar = React.createClass({
 		);
 	}
 });
+
+var If = React.createClass({
+	render: function() {
+		if (this.props.test) {
+			return this.props.children;
+		}
+		else {
+			return false;
+		}
+	}
+});
+
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+

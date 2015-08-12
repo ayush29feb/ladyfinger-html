@@ -114,8 +114,14 @@ var Header = React.createClass({
 			<nav className="navbar navbar-default navbar-fixed-top">
 				<div className="container">
 					<div id="header" className="row">
-						<div className="col-md-12">
+						<div className="col-md-2 col-xs-2">
+							<i className="fa fa-logout"></i>
+						</div>
+						<div className="col-md-8 col-xs-8">
 							<img id="logo" src="img/jutebaglogo.png"/>
+						</div>
+						<div className="col-md-2 col-xs-2">
+							<i className="fa fa-user"></i><span className="hidden-xs"> Profile</span>
 						</div>
 					</div>
 					<NavTabs page={this.props.page} changeTabs={this.props.changeTabs} />
@@ -163,7 +169,7 @@ var BottomBar = React.createClass({
 			<nav id="bottombar" className="navbar navbar-default navbar-fixed-bottom" 
 				onClick={this.props.action} >
 				<div className="container">
-					<span>{this.props.text}</span>
+					<i className="fa fa-shopping-cart" /><span>{this.props.text}</span>
 				</div>
 			</nav>
 		);

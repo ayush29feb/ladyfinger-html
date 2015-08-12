@@ -8,7 +8,7 @@ var ProductPanel = React.createClass({
 			apiTabMap['Fruits'] = 'fruit';
 			apiTabMap['Dairy'] = 'dairy';
 		$.ajax({
-			url: 'http://192.168.0.101:5000/api/v1/products/' + apiTabMap[tab],
+			url: 'http://192.168.0.102:5000/api/v1/products/' + apiTabMap[tab],
 			dataType: 'json',
 			cache: false,
 			success: function(data) {
@@ -130,7 +130,7 @@ var Product = React.createClass({
 			<div className="item col-md-4 col-sm-6 col-xs-12">
 			<div className="row">
 				<div className={this.state.blur}>
-					<div className="showcase col-xs-6" onClick={this.onUpClick}>
+					<div className="showcase col-xs-5" onClick={this.onUpClick}>
 						<img src={"img/products/" + this.props.photo} className="img-responsive" />
 						<h4>Rs. {this.props.rate} / kg</h4>
 					</div>
@@ -139,7 +139,7 @@ var Product = React.createClass({
 						<span className="number">{this.state.qty} kg</span>
 						<i className="fa fa-chevron-down" onClick={this.onDownClick}></i>
 					</div>
-					<div className="addcart col-xs-2" onClick={this.addItemToCart}>
+					<div className="addcart col-xs-3" onClick={this.addItemToCart}>
 						<i className="fa fa-cart-plus"></i>
 						<span style={{display: 'block'}}>Add To Cart</span>
 					</div>
